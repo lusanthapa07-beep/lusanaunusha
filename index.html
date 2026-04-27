@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Click Game</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: linear-gradient(270deg, #ff416c, #ff4b2b);
+        background-size: 400% 400%;
+        animation: bgAnim 8s ease infinite;
+        color: white;
+    }
+
+    @keyframes bgAnim {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    #gameArea {
+        position: relative;
+        width: 90%;
+        height: 60vh;
+        margin: 20px auto;
+        border: 2px solid white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    #ball {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: yellow;
+        border-radius: 50%;
+        cursor: pointer;
+        animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+        from { transform: scale(1); }
+        to { transform: scale(1.2); }
+    }
+
+    #score {
+        font-size: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background: white;
+        color: #ff4b2b;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #eee;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🎮 Click the Ball Game</h1>
+<p id="score">Score: 0</p>
+<button onclick="startGame()">Start Game</button>
+
+<div id="gameArea">
+    <div id="ball"></div>
+</div>
+
+<script>
+let score = 0;
+let speed = 1000;
+let gameInterval;
+
+const ball = document.getElementById("ball");
+const gameArea = document.getElementById("gameArea");
+const scoreText = document.getElementById("score");
+
+function randomPosition() {
+    const maxX = gameArea.clientWidth - 60;
+    const maxY = gameArea.clientHeight - 60;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    ball.style.left = x + "px";
+    ball.style.top = y + "px";
+}
+
+function moveBall() {
+    randomPosition();
+}
+
+function startGame() {
+    score = 0;
+    speed = 1000;
+    scoreText.textContent = "Score: " + score;
+
+    clearInterval(gameInterval);
+    gameInterval = setInterval(moveBall, speed);
+}
+
+ball.addEventListener("click", () => {
+    score++;
+    scoreText.textContent = "Score: " + score;
+
+    // Increase difficulty
+    if (speed > 300) {
+        speed -= 50;
+        clearInterval(gameInterval);
+        gameInterval = setInterval(moveBall, speed);
+    }
+
+    moveBall();
+});
+
+// initial position
+randomPosition();
+</script>
+
+</body>
+</html>
